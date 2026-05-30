@@ -1,0 +1,226 @@
+import tkinter as tk
+from tkinter import messagebox
+import json
+import os
+
+LICENSE_FILE = "license.json"
+
+VALID_LICENSES = {
+    "EXODUS-0001-A7K9",
+    "EXODUS-0002-P4M2",
+    "EXODUS-0003-X8Q1",
+    "EXODUS-0004-L5T7",
+    "EXODUS-0005-V2N8",
+    # ... dodaj pozostałe klucze
+    "EXODUS-0100-R1T8"
+    "EXODUS-0100-R1T8"
+    "EXODUS-0089-J8M2"
+    "EXODUS-0080-Y5L8"
+    "EXODUS-0077-R3T5"
+}
+
+
+class LicenseManager:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Aktywacja Licencji")
+        self.root.geometry("450x250")
+
+        if self.is_activated():
+            self.start_program()
+            return
+
+        tk.Label(
+            self.root,
+            text="Wprowadź klucz licencyjny",
+            font=("Arial", 14, "bold")
+        ).pack(pady=20)
+
+        self.license_entry = tk.Entry(
+            self.root,
+            width=35,
+            font=("Arial", 12)
+        )
+        self.license_entry.pack(pady=10)
+
+        tk.Button(
+            self.root,
+            text="Aktywuj",
+            command=self.activate_license
+        ).pack(pady=15)
+
+        tk.Label(
+            self.root,
+            text="Discord - 0ywe",
+            font=("Arial", 9)
+        ).pack(side="bottom", pady=10)
+
+    def is_activated(self):
+        if not os.path.exists(LICENSE_FILE):
+            return False
+
+        try:
+            with open(LICENSE_FILE, "r") as f:
+                data = json.load(f)
+
+            return data.get("license_key") in VALID_LICENSES
+
+        except Exception:
+            return False
+
+    def activate_license(self):
+        key = self.license_entry.get().strip()
+
+        if key in VALID_LICENSES:
+            with open(LICENSE_FILE, "w") as f:
+                json.dump({
+                    "license_key": key
+                }, f)
+
+            messagebox.showinfo(
+                "Sukces",
+                "Licencja została aktywowana."
+            )
+
+            self.start_program()
+
+        else:
+            messagebox.showerror(
+                "Błąd",
+                "Nieprawidłowy klucz licencyjny."
+            )
+
+    def start_program(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        self.root.title("Program aktywowany")
+
+        tk.Label(
+            self.root,
+            text="Program został aktywowany!",
+            font=("Arial", 16, "bold")
+        ).pack(pady=50)
+
+    def run(self):
+        self.root.mainloop()
+
+
+if __name__ == "__main__":
+    app = LicenseManager()
+    app.run()
+
+import tkinter as tk
+from tkinter import messagebox, scrolledtext
+import time
+import threading
+
+class ExodusHackerTool:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Exodus")
+        self.root.configure(bg="#000000")
+        self.root.geometry("800x550")
+        
+        # Title
+        title = tk.Label(self.root, text="EXODUS", font=("Courier", 32, "bold"), 
+                        fg="#ff0000", bg="#000000")
+        title.pack(pady=40)
+        
+        # DDoS Button
+        btn = tk.Button(self.root, text="DDoS Attack", font=("Courier", 16, "bold"),
+                      fg="#ff0000", bg="#0a0a0a", activebackground="#330000",
+                      activeforeground="#ff0000", relief="solid", bd=3,
+                      width=25, height=3, command=self.show_ddos)
+        btn.pack(pady=30)
+        
+        # Watermark
+        watermark = tk.Label(self.root, text="haszysz x 0ywe", font=("Courier", 8), 
+                           fg="#330000", bg="#000000")
+        watermark.place(relx=1.0, rely=1.0, x=-10, y=-5, anchor="se")
+    
+    def show_ddos(self):
+        panel = tk.Toplevel(self.root)
+        panel.title("DDoS Attack")
+        panel.configure(bg="#000000")
+        panel.geometry("620x620")
+        
+        tk.Label(panel, text="TARGET IP:", font=("Courier", 14, "bold"), fg="#ff0000", bg="#000000").pack(pady=10)
+        
+        ip_entry = tk.Entry(panel, font=("Courier", 14), fg="#ff0000", bg="#111111", 
+                           width=35, insertbackground="#ff0000", justify="center")
+        ip_entry.pack(pady=8)
+        
+        tk.Label(panel, text="BOTNET SIZE:", font=("Courier", 14, "bold"), fg="#ff0000", bg="#000000").pack(pady=10)
+        bots_entry = tk.Entry(panel, font=("Courier", 14), fg="#ff0000", bg="#111111", 
+                            width=35, insertbackground="#ff0000", justify="center")
+        bots_entry.insert(0, "1250")
+        bots_entry.pack(pady=8)
+        
+        tk.Button(panel, text="LAUNCH BOTNET DDoS", font=("Courier", 14, "bold"), 
+                 fg="#ff0000", bg="#0a0a0a", height=2, width=28,
+                 command=lambda: self.start_attack(ip_entry.get(), bots_entry.get(), panel)).pack(pady=20)
+        
+        # Watermark
+        tk.Label(panel, text="haszysz x 0ywe", font=("Courier", 7), 
+                fg="#330000", bg="#000000").pack(side="bottom", pady=8)
+    
+    def start_attack(self, ip, bots, panel):
+        if not ip:
+            messagebox.showwarning("Exodus", "ENTER TARGET IP")
+            return
+        
+        try:
+            bot_count = int(bots) if bots else 1250
+        except:
+            bot_count = 1250
+        
+        # Create attack window
+        attack_win = tk.Toplevel(panel)
+        attack_win.title("LIVE BOTNET ATTACK")
+        attack_win.configure(bg="#000000")
+        attack_win.geometry("700x500")
+        
+        tk.Label(attack_win, text=f"ATTACKING {ip}", font=("Courier", 16, "bold"), 
+                fg="#ff0000", bg="#000000").pack(pady=10)
+        
+        status_label = tk.Label(attack_win, text="Initializing Botnet...", font=("Courier", 12), 
+                              fg="#ff0000", bg="#000000")
+        status_label.pack(pady=5)
+        
+        log = scrolledtext.ScrolledText(attack_win, font=("Courier", 10), bg="#0a0a0a", fg="#ff0000", height=20)
+        log.pack(padx=20, pady=10, fill="both", expand=True)
+        
+        # Start simulation in thread
+        threading.Thread(target=self.simulate_attack, args=(ip, bot_count, log, status_label), daemon=True).start()
+    
+    def simulate_attack(self, ip, bot_count, log, status_label):
+        log.insert(tk.END, f"[+] Botnet of {bot_count} bots connected via automatic proxy\n")
+        log.insert(tk.END, f"[+] Starting flood on {ip}\n\n")
+        log.see(tk.END)
+        
+        for i in range(1, min(bot_count, 80) + 1):  # Show up to 80 bots for performance
+            time.sleep(0.12)  # Real-time feel
+            log.insert(tk.END, f"[BOT {i:04d}] Sending packets to {ip} | Status: FLOODING\n")
+            log.see(tk.END)
+            
+            if i % 15 == 0:
+                status_label.config(text=f"Active Bots: {i} / {bot_count} | Packets Sent: {i*850}")
+        
+        # Final message
+        time.sleep(0.5)
+        log.insert(tk.END, "\n" + "="*60 + "\n")
+        log.insert(tk.END, f"[SUCCESS] BOTNET DDoS FULLY ACTIVE ON {ip}\n")
+        log.insert(tk.END, f"Total bots deployed: {bot_count}\n")
+        log.insert(tk.END, "Proxy protection: ACTIVE | Your IP hidden\n")
+        log.insert(tk.END, "[SIMULATION MODE]\n")
+        log.see(tk.END)
+        
+        status_label.config(text="ATTACK IN PROGRESS - STAYING CONNECTED")
+    
+    def run(self):
+        self.root.mainloop()
+
+if __name__ == "__main__":
+    tool = ExodusHackerTool()
+    tool.run()
